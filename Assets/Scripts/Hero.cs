@@ -2,52 +2,52 @@ using UnityEngine;
 
 class HeroState {
 
-	public virtual void Update( Hero hero ) {}
+  public virtual void Update( Hero hero ) {}
 
-	public HeroState SwitchState( HeroState state ) {
-		return state;
-	}
+  public HeroState SwitchState( HeroState state ) {
+    return state;
+  }
 
-	public sealed class Idle : HeroState {}
+  public sealed class Idle : HeroState {}
 
-	public sealed class Moving : HeroState {
-		Vector3 target;
+  public sealed class Moving : HeroState {
+    Vector3 target;
 
-		internal Moving( Vector3 t ) { target = t; }
+    internal Moving( Vector3 t ) { target = t; }
 
-		public override void Update( Hero hero ) {
-			// TODO: Actually make this based on movement-speed
-			float moveLength = Time.deltaTime;
+    public override void Update( Hero hero ) {
+      // TODO: Actually make this based on movement-speed
+      float moveLength = Time.deltaTime;
 
-			if( hero.PlanarDistance( target ) > moveLength ) {
-				hero.MoveDirection( ( target - hero.planarPosition ).normalized );
-			} else {
-				hero.SetPosition( target );
-				hero.state = new Idle();
-			}
-		}
-	}
+      if( hero.PlanarDistance( target ) > moveLength ) {
+        hero.MoveDirection( ( target - hero.planarPosition ).normalized );
+      } else {
+        hero.SetPosition( target );
+        hero.state = new Idle();
+      }
+    }
+  }
 }
 
 
 public class Hero : Actor, ICommandable {
 
-	internal HeroState state = new HeroState.Idle();
+  internal HeroState state = new HeroState.Idle();
 
   public void GotCommand( Command cmd ) {
 
-		if ( cmd is Command.MoveTo ) {
-			Vector3 dest = ( (Command.MoveTo) cmd ).destination;
-			state = state.SwitchState( new HeroState.Moving( dest ) );
-		}
+    if ( cmd is Command.MoveTo ) {
+      Vector3 dest = ( (Command.MoveTo) cmd ).destination;
+      state = state.SwitchState( new HeroState.Moving( dest ) );
+    }
 
-	}
+  }
 
-	public override void Update() {
-		base.Update();
+  public override void Update() {
+    base.Update();
 
-		// Update the hero based on their state
-		state.Update( this );
-	}
+    // Update the hero based on their state
+    state.Update( this );
+  }
 
 }

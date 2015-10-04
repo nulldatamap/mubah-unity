@@ -9,5 +9,4 @@ public struct Stats {
     health = maxHealth;
   }
 
-
 }
