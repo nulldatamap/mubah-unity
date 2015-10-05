@@ -45,7 +45,11 @@ public class Hero : Actor, ICommandable {
 
     if ( cmd is Command.MoveTo ) {
       Vector3 dest = ( (Command.MoveTo) cmd ).destination;
-      state = state.SwitchState( new HeroState.Moving( dest ) );
+
+      if( dest != transform.position ) {
+        state = state.SwitchState( new HeroState.Moving( dest ) );
+      }
+
     }
 
   }

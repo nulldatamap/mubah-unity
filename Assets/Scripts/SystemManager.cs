@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine.Assertions;
 
+// TODO: Add a network manager
+
 public class SystemManager : MonoBehaviour {
 
   public IGameMode gameMode = new StandardGameMode();
