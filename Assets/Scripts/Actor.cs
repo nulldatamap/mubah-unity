@@ -4,7 +4,7 @@ public class Actor : Entity {
   Stats baseStats;
   Stats effectiveStats;
 
-  public void Start() {
+  public override void Start() {
     base.Start();
 
     baseStats = new Stats();

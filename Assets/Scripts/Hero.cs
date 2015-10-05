@@ -1,10 +1,17 @@
 using UnityEngine;
 
-class HeroState {
+/*
+  data HeroState = Idle
+                 | Moving Vector3
+*/
 
+abstract class HeroState {
+  private HeroState() {}
+
+  // Defualt does nothing
   public virtual void Update( Hero hero ) {}
 
-  public HeroState SwitchState( HeroState state ) {
+  public virtual HeroState SwitchState( HeroState state ) {
     return state;
   }
 
