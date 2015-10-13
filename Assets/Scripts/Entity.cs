@@ -1,10 +1,35 @@
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.Assertions;
 
-public class Entity : MonoBehaviour {
-  Rigidbody rigidBody;
+public enum Team {
+  Neutral,
+  Friendly,
+  Enemy,
+}
 
-  public Vector3 planarPosition {
+public class Entity : NetworkBehaviour {
+  internal Rigidbody rigidBody;
+
+  internal Team team = Team.Neutral;
+
+  // TODO: Bad naming?
+  public Team Team {
+    get { return team; }
+
+    set {
+      team = value;
+      gameObject.layer = Utility.GetLayerValue( team, isLocalPlayer ); 
+    }
+  }
+
+  bool targetable = true;
+
+  public bool IsTargetable {
+    get { return targetable; }
+  }
+
+  public Vector3 PlanarPosition {
     get {
       Vector3 pos = transform.position;
       pos.y = 0;
@@ -29,13 +54,17 @@ public class Entity : MonoBehaviour {
 
   public void MoveDirection( Vector3 dir ) {
     // TODO: Base this on movement speed
+    rigidBody.isKinematic = false;
     rigidBody.velocity = dir;
   }
 
-  // Set's the planar position and stops any ongoing motion
+  public void StopMoving() {
+    rigidBody.isKinematic = true;
+  }
+
+  // Set's the planar position and stops
   public void SetPosition( Vector3 pos ) {
-    planarPosition = pos;
-    rigidBody.velocity = Vector3.zero;
+    PlanarPosition = pos;
   }
 
   virtual public void Start() {
@@ -43,7 +72,6 @@ public class Entity : MonoBehaviour {
     Assert.IsNotNull( rigidBody );
   }
 
-  virtual public void Update() {
-  }
+  virtual public void Update() {}
 }
 

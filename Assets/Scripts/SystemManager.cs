@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
+using UnityEngine.Networking;
 using UnityEngine.Assertions;
+using System.Collections.Generic;
 
 // TODO: Add a network manager
 
-public class SystemManager : MonoBehaviour {
+public class SystemManager : NetworkManager {
 
   public IGameMode gameMode = new StandardGameMode();
-
-  List<ICommander> commanders = new List<ICommander>();
 
   public CameraController cameraController;
 
@@ -17,19 +16,31 @@ public class SystemManager : MonoBehaviour {
   }
 
   void Start() {
-    cameraController =
-      GameObject.Find( "PCameraController" ).GetComponent<CameraController>();
-    
     Assert.IsNotNull( cameraController );
-
-    gameMode.SetupGameState();
-
-    commanders = gameMode.CreateCommanders();
   }
 
   void Update() {
-    foreach( ICommander cm in commanders ) {
-      cm.EmitCommands();
-    }
   }
+
+  /*override public void OnStartServer() {
+    // Setup the word without players
+  }
+
+  override public void OnServerConnect( NetworkConnection conn ) {
+    
+  }
+
+  override public void OnServerAddPlayer( NetworkConnection conn, short cid ) {
+
+  }
+
+  override public void OnStartClient( NetworkClient client ) {
+
+  }*/
+
+  override public void OnClientConnect( NetworkConnection conn ) {
+    ClientScene.AddPlayer( conn, 0 );
+  }
+
 }
+

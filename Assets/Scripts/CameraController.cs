@@ -43,11 +43,13 @@ abstract class CameraMode {
     public LockedOn( GameObject t ) { target = t; }
 
     public override void Update( CameraController cc ) {
-      Vector3 newPos = target.transform.position + cc.offset;
-      // Always keep the height the same
-      newPos.y = cc.offset.y;
+      
+      if( target == null ) {
+        cc.mode = Switch( new CameraMode.Free() );
+        return;
+      }
 
-      cc.transform.position = newPos;
+      cc.SetPosition( target.transform.position );
     }
   }
 }
@@ -64,8 +66,12 @@ public class CameraController : MonoBehaviour {
   }
    
   Vector3 FindOffset() {
-    Vector3 screenCenter = new Vector3( Screen.width / 2, Screen.height / 2, 0 );
-    Vector3 offset = transform.position - Utility.ScreenPointToPlanarPoint( screenCenter );
+    // TODO: Make this dependant on the map
+    Vector3 screenCenter =
+      new Vector3( Screen.width / 2, Screen.height / 2, 0 );
+    
+    Vector3 offset =
+      transform.position - Utility.ScreenPointToPlanarPoint( screenCenter );
 
     return offset;
   }
@@ -78,15 +84,27 @@ public class CameraController : MonoBehaviour {
     }
   }
 
+  public void SnapTo( GameObject t ) {
+    if( !(mode is CameraMode.LockedOn) ) {
+      SetPosition( t.transform.position );
+    }
+  }
+
+  public void SetPosition( Vector3 pos ) {
+    Vector3 newPos = pos + offset;
+    // Always keep the height the same
+    newPos.y = offset.y;
+
+    transform.position = newPos;
+  }
+
   void Start() {
     camera = GetComponentInChildren<Camera>();
     Assert.IsNotNull( camera );
 
     // TODO: Make this based on settings
-    // TODO: Make this based on our player
     mode = new CameraMode.Free();
 
-    // TODO: Make this dependant on the map
     offset = FindOffset();
   }
 
