@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.Networking;
 
 public abstract class HeroState {
@@ -45,7 +44,7 @@ public abstract class HeroState {
   }
 }
 
-[CustomEditor( typeof( Actor ), true )]
+
 public class Hero : Actor {
 
   internal HeroState state = new HeroState.Idle();

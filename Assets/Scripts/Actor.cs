@@ -1,12 +1,9 @@
 using UnityEngine;
-using UnityEditor;
 using UnityEngine.Networking;
 
-[CustomEditor( typeof( Entity ), true )]
+
 public class Actor : Entity {
-  [SyncVar]
   public Stats baseStats;
-  [SyncVar]
   public Stats effectiveStats;
 
   public override void Start() {

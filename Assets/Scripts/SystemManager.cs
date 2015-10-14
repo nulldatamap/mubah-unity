@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 // TODO: Add a network manager
 
-public class SystemManager : NetworkManager {
+public class SystemManager : MonoBehaviour {
 
-  public IGameMode gameMode = new StandardGameMode();
-
+  public MutliplayerManager multiplayerManager;
+  public GameMode gameMode;
   public CameraController cameraController;
 
   public static SystemManager Get() {
@@ -17,29 +17,24 @@ public class SystemManager : NetworkManager {
 
   void Start() {
     Assert.IsNotNull( cameraController );
+
+    multiplayerManager = new MutliplayerManager();
+
+    Debug.Log( "Q to host, W to connect" );
   }
 
   void Update() {
-  }
-
-  /*override public void OnStartServer() {
-    // Setup the word without players
-  }
-
-  override public void OnServerConnect( NetworkConnection conn ) {
-    
-  }
-
-  override public void OnServerAddPlayer( NetworkConnection conn, short cid ) {
-
-  }
-
-  override public void OnStartClient( NetworkClient client ) {
-
-  }*/
-
-  override public void OnClientConnect( NetworkConnection conn ) {
-    ClientScene.AddPlayer( conn, 0 );
+    if( !multiplayerManager.running ) {
+      if( Input.GetKeyDown( KeyCode.Q ) ) {
+        Debug.Log( "Hosting..." );
+        multiplayerManager.LocalHost();
+      } else if( Input.GetKeyDown( KeyCode.W ) ) {
+        Debug.Log( "Connecting..." );
+        multiplayerManager.LocalConnect();
+      }
+    } else {
+      multiplayerManager.Update();
+    }
   }
 
 }

@@ -90,7 +90,15 @@ public class Option<T> {
   public Option<T> OrElse( Else els ) {
     return Match( x => Some( x )
                 , () => els() );
-  } 
+  }
+
+  public delegate void Withf( T t );
+
+  public void With( Withf with ) {
+    if( IsSome() ) {
+      with( inner );
+    }
+  }
 
 }
 

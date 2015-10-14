@@ -13,6 +13,8 @@ public class Entity : NetworkBehaviour {
 
   internal Team team = Team.Neutral;
 
+  public int netId = 0;
+
   // TODO: Bad naming?
   public Team Team {
     get { return team; }

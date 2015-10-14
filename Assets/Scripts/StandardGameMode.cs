@@ -2,18 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class StandardGameMode : IGameMode {
-  public Hero player;
+public class StandardGameMode : GameMode {
   
-  public void SetupGameState() {
+   public StandardGameMode( bool host ) : base( host ) {}
+
+  public override void SetupGameState() {
+    
     GameObject map = GameObject.Find( "PMap" );
 
-    GameObject hero =
-      GameObject.Instantiate( Resources.Load("PHero") ) as GameObject;
-
-    player = hero.GetComponent<Hero>();
+    Hero hero = NetSpawn<Hero>( "PHero", Vector3.zero );
 
     hero.transform.parent = map.transform;
-
   }
 }
